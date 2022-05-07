@@ -2,6 +2,12 @@
 
 This app is for SPIRE LAB @IISc, Bangalore
 
+
+demo of the app 
+
+https://bhargavi1105.pythonanywhere.com 
+
+
 requirements.txt has the list of all modules required for the app.
 python3.8 has been used for this.
 
