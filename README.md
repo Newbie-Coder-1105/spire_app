@@ -27,7 +27,7 @@ you can run
 
   python model.py 
 
-to create database again with correction.
+to create database or reset the database to original
 
 
 
