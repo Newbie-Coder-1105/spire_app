@@ -10,6 +10,7 @@ Use following commands for starting the app after installing all the requirement
 For linux users
 
   export FLASK_APP=main
+  
   flask run
 
 Important Files:
