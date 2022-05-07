@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    </head>
+    <body>
+        <table>
+        {% for eg in egz %}
+    <ul class="w3-row">
+       <li class ="w3-white w3-container w3-cell w3-quarter" height="0.2vh"><p>{{ eg.title }}</p></li>
+       <li class="w3-white w3-container w3-cell w3-quarter"><p>{{ eg.txt }}</p></li>
+       <li class="w3-container w3-cell w3-quarter"> 
+    {% if eg.iscorrect == True %}
+        <input class="w3-radio" type="radio" name="radio{{ eg.id }}" id="radiot{{ eg.id }}" value="true" onchange="changedb(this.id);" checked>
+        <label>Correct</label>
+    
+        <input class="w3-radio" type="radio" name="radio{{ eg.id }}" id="radiof{{ eg.id }}" value="false" onchange="changedb(this.id);">
+        <label>Not Correct</label>   
+</li>
+<li class="w3-container w3-cell w3-quarter">
+    <button class="w3-container w3-cell w3-button w3-red" id="button{{ eg.id }}" onclick="location.href='/viewexamples/{{ eg.id }}'"  type="button" disabled>Edit this</button>
+</li>
+
+        {% else %}    
+        <input class="w3-radio" type="radio" name="radio{{ eg.id }}" id="radiot{{ eg.id }}" value="true" onchange="changedb(this.id);">
+        <label>Correct</label>
+    
+        <input class="w3-radio" type="radio" name="radio{{ eg.id }}" id="radiof{{ eg.id }}" value="false" onchange="changedb(this.id);" checked>
+        <label>Not Correct</label>
+       </li>
+       <li class="w3-container w3-cell w3-quarter">
+        <button class="w3-container w3-cell w3-button w3-red" id="button{{ eg.id }}" onclick="location.href='/viewexamples/{{ eg.id }}'"  type="button" >Edit this</button>
+    </li>
+
+        {% endif %}
+        
+    
+    
+</ul>
+<div class="w3-black w3-container" height="5px"></div>    
+
+       {% endfor %}
+    </table>
+       <script>
+
+function changedb(id){
+    rad=document.getElementById(id).value;
+    console.log(rad);
+    if (rad=="false"){
+        document.getElementById("button"+id.slice(6)).disabled=false;
+    }else if (rad=="true"){
+        document.getElementById("button"+id.slice(6)).disabled=true;
+    }
+    }
+        </script>
+    </body>
+</html>

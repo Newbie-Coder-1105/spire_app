@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+    
+.selectStyle {
+    background-color: yellowgreen;
+  }
+</style>
+    </head>
+    <body>
+        
+    <div class="w3-row">
+       <h1 class ="w3-blue w3-container w3-cell">    <audio controls ontimeupdate="myFunction(this)" id="aud1">
+        
+        <source src="/static/{{ egz.title }}" type="audio/wav">
+        Your browser does not support the audio tag.
+    </audio>
+    Time: <div id='timeupdate'></div>
+</h1>
+       <h2 class="w3-white w3-container w3-cell" >
+    {% for correction in egz.corrections %}
+    {% if correction.Correct == False %}
+    <p style="display:inline-block" id="txtslide{{ correction.id1 }}" onclick="toggleClass(this.id)" class="txtslide selectStyle"> {{ correction.txt }} </p>
+    {% else  %}
+        <p style="display:inline-block" id="txtslide{{ correction.id1 }}" onclick="toggleClass(this.id)" class="txtslide"> {{ correction.txt }} </p>
+    {% endif %}       
+        
+   
+        {% endfor %}
+    </h2>
+       
+    <div class="w3-container w3-cell">
+        <button class="w3-container w3-cell w3-button w3-red" id="button{{ egz.id }}" onclick="update_db(this.id)">Update Correction</button>
+    </div>
+    </br>
+       </div>
+        <script>
+            
+            function toggleClass(idd){
+            document.getElementById(idd).classList.toggle("selectStyle");
+            var sel=parseInt(idd.slice(8));
+            var ios=selectedArray.indexOf(sel);
+            if (ios ==-1){
+            selectedArray.push(parseInt(idd.slice(8)));
+            } else if (ios !=-1){
+                selectedArray.splice(ios,1);
+            }
+            }
+            var jsonobj = {{ jsonobject | safe }};
+            cor1={{ corObj | safe }};
+            var selectedArray=Object.values(cor1.corray);
+            
+            function update_db(id) {
+
+                $.ajax({
+                type: 'POST',
+                url: '/updatedcorrection/'+id.slice(6),
+                data: JSON.stringify({"name": selectedArray}), // or JSON.stringify ({name: 'jonas'}),
+                success: function (data) { alert('data: ' + data); },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+            alert("Data Updated");
+            }
+            function closestIndex(num, arr) {
+                var num=parseFloat(num);
+                var curr = parseFloat(arr[0]), diff = (num - curr);
+                var index = 0;
+                for (let val = 0; val < arr.length; val++) {
+                    var newdiff = parseFloat(arr[val])-num;
+                    if (newdiff > 0 && val!=0) {
+                        diff = newdiff;
+                        curr = parseFloat(arr[val]);
+                        index = val-1;
+                        break;
+                    }else if (val == arr.length-1){
+                        index=val;
+                    }
+                };
+                return index+1;
+            }
+            
+            function myFunction(event) {
+                document.getElementById("aud1").playbackRate = 0.5;
+                curTime = document.getElementById("aud1").currentTime;
+                document.getElementById("timeupdate").innerHTML=curTime;
+                idx=closestIndex(curTime, Object.values(jsonobj.TimeSeries))
+                els = document.getElementsByClassName("txtslide");
+                for (var i = 0; i < els.length; i++) {
+                    els[i].style.color = 'black';
+                }
+                document.getElementById("txtslide" + idx).style.color = "blue";
+            }
+    
+        </script>
+    </body>
+</html>
